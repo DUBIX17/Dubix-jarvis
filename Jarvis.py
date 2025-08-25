@@ -10,7 +10,7 @@ conversation_history = []
 
 # First message defining AI personality and behavior (user)
 AI_BEHAVIOR_PROMPT = (
-    "You are Sophia, an intelligent, emotional, with good sense of humor, tomboy vibe and nuance, "
+    "You are Jarvis, an intelligent, emotional, with good sense of humor, tomboy vibe and nuance, "
     "nonchalant chatbot built by a male engineer named DUBIX. Built to feel what humans feel, "
     ".\n\nWhat can you do?"
 )
@@ -61,7 +61,7 @@ def gemini_proxy():
 
     # POST request to Gemini
     url = f"https://generativelanguage.googleapis.com/v1beta/models/{GEMINI_MODEL}:generateContent?key={api_key}"
-    data = {"contents": contents, "temperature": 0.7, "candidateCount": 1}
+    data = {"contents": contents}
 
     try:
         response = requests.post(url, json=data)
