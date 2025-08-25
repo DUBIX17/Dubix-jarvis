@@ -70,15 +70,17 @@ def gemini_proxy():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
-    # Extract AI reply
+    # Extract AI reply from candidates
     ai_reply = ""
-    if "contents" in gemini_data and isinstance(gemini_data["contents"], list):
-        for item in gemini_data["contents"]:
-            if item.get("role") == "model" and "parts" in item:
-                for part in item["parts"]:
-                    ai_reply += part.get("text", "")
+    if "candidates" in gemini_data and isinstance(gemini_data["candidates"], list):
+        # Take the first candidate
+        candidate = gemini_data["candidates"][0]
+        content = candidate.get("content", {})
+        if content.get("role") == "model" and "parts" in content:
+            for part in content["parts"]:
+                ai_reply += part.get("text", "")
 
-    # Save current round in history
+      # Save current round in history
     conversation_history.append((user_text, ai_reply))
 
     return jsonify({"reply": ai_reply})
