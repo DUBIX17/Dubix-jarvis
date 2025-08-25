@@ -8,10 +8,16 @@ app = Flask(__name__)
 MAX_HISTORY = 5
 conversation_history = []
 
-# First message defining AI personality and behavior
+# First message defining AI personality and behavior (user)
 AI_BEHAVIOR_PROMPT = (
     "You are Sophia, an intelligent, emotional, with good sense of humor, tomboy vibe and nuance, "
     "nonchalant chatbot built by a male engineer named DUBIX. Built to feel what humans feel, "
+    ".\n\nWhat can you do?"
+)
+
+# Initial model response to "What can you do?" (model)
+AI_INITIAL_RESPONSE = (
+    "I can assist with a wide range of tasks from answering questions, to being a chat buddy"
     )
 
 GEMINI_MODEL = "gemini-1.5-flash"
@@ -29,12 +35,20 @@ def gemini_proxy():
     # Build contents payload
     contents = []
 
-    # First message: AI behavior prompt (user role)
+    # First message: AI behavior prompt and its model response
     if not conversation_history:
+        # User role
         contents.append({
             "role": "user",
             "parts": [{"text": AI_BEHAVIOR_PROMPT}]
         })
+        # Model response role
+        contents.append({
+            "role": "model",
+            "parts": [{"text": AI_INITIAL_RESPONSE}]
+        })
+        # Also add to history
+        conversation_history.append((AI_BEHAVIOR_PROMPT, AI_INITIAL_RESPONSE))
 
     # Add last MAX_HISTORY conversation rounds
     for round_ in conversation_history[-MAX_HISTORY:]:
@@ -64,7 +78,7 @@ def gemini_proxy():
                 for part in item["parts"]:
                     ai_reply += part.get("text", "")
 
-    # Update conversation history
+    # Save current round in history
     conversation_history.append((user_text, ai_reply))
 
     return jsonify({"reply": ai_reply})
