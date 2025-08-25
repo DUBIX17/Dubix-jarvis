@@ -101,7 +101,7 @@ def gemini_proxy():
     # Save current round in history
     conversation_history.append((user_text, ai_reply_clean))
 
-    return jsonify({"reply": ai_reply_clean})
+    return jsonify(ai_reply_clean)
 
 
 if __name__ == "__main__":
