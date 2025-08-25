@@ -31,7 +31,7 @@ def gemini_proxy():
 
     # First message: AI behavior
     payload.append({
-        "role": "system",
+        "role": "user",
         "parts": [{"text": AI_BEHAVIOR_PROMPT}]
     })
 
