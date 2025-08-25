@@ -13,7 +13,7 @@ conversation_history = []
 # AI behavior prompt (first message)
 AI_BEHAVIOR_PROMPT = "You are a helpful assistant for home automation and coding projects."
 
-GEMINI_BASE_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?"  # replace with actual Gemini endpoint
+GEMINI_BASE_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent"  # replace with actual Gemini endpoint
 
 @app.route("/gemini_proxy", methods=["GET"])
 def gemini_proxy():
