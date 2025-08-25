@@ -1,6 +1,7 @@
 from flask import Flask, request, jsonify
 import requests
 import os
+import json
 
 app = Flask(__name__)
 
@@ -13,7 +14,8 @@ conversation_history = []
 # AI behavior prompt (first message)
 AI_BEHAVIOR_PROMPT = "You are a helpful assistant for home automation and coding projects."
 
-GEMINI_BASE_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent"  # replace with actual Gemini endpoint
+# Google Gemini endpoint
+GEMINI_URL = "https://gemini.api.example.com/v1/responses"  # replace with actual Gemini URL
 
 @app.route("/gemini_proxy", methods=["GET"])
 def gemini_proxy():
@@ -29,15 +31,14 @@ def gemini_proxy():
     # Build conversation payload
     payload = []
 
-    # First message: AI behavior
+    # First message: AI behavior/system prompt
     payload.append({
         "role": "user",
         "parts": [{"text": AI_BEHAVIOR_PROMPT}]
     })
 
-    # Add last MAX_HISTORY rounds
+    # Include last MAX_HISTORY rounds
     for round_ in conversation_history[-MAX_HISTORY:]:
-        # Each round is a tuple: (user_text, ai_response)
         user_msg, ai_msg = round_
         payload.append({
             "role": "user",
@@ -54,21 +55,21 @@ def gemini_proxy():
         "parts": [{"text": user_text}]
     })
 
-    # Send GET request to Gemini
-    # Here we pass API key as header and payload as JSON-encoded string in query
-    # Some Gemini APIs may require POST; adjust if needed
+    # Build Gemini POST request
+    headers = {
+        "Authorization": f"Bearer {api_key}",
+        "Content-Type": "application/json"
+    }
+    post_data = {"conversation": payload}
+
     try:
-        response = requests.get(
-            GEMINI_BASE_URL,
-            headers={"Authorization": f"Bearer {api_key}"},
-            params={"payload": str(payload)}
-        )
+        response = requests.post(GEMINI_URL, headers=headers, data=json.dumps(post_data))
         response.raise_for_status()
         gemini_data = response.json()
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
-    # Extract AI reply (assuming response format has 'parts' text)
+    # Extract AI reply from Gemini response
     ai_reply = ""
     if "output" in gemini_data:
         for item in gemini_data["output"]:
