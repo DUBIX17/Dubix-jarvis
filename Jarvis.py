@@ -19,7 +19,7 @@ AI_INITIAL_RESPONSE = (
     "I can assist with a wide range of tasks from answering questions, to being a chat buddy"
 )
 
-GEMINI_MODEL = "gemini-1.5-flash"
+GEMINI_MODEL = "gemini-2.5-flash"
 
 def clean_reply(text):
     text = re.sub(r"#\w+", "", text)  # remove hashtags
