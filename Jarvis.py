@@ -10,8 +10,8 @@ conversation_history = []  # stores only user ↔ AI turns
 
 # Constant "intro" messages that always prepend the conversation
 AI_BEHAVIOR_PROMPT = (
-    "You are Jarvis, an intelligent, emotional, with good sense of humor, tomboy vibe and nuance, "
-    "nonchalant chatbot built by a male engineer named DUBIX. Built to feel what humans feel, "
+    "You are Jarvis, a smart, with good sense of humor, "
+    "chatbot built by a male engineer named DUBIX. Built to feel what humans feel, "
     "Do not use emoji.\n\nWhat can you do?"
 )
 
